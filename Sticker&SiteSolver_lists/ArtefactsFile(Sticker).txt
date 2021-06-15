@@ -1,0 +1,65 @@
+d	Cond_a	Lab_ArtefactIdentifier	Lab_Description	Cond_m
+ 	 	NoArt	 	 
+-229.16358		(-TMT)	No marcado	
+-91.01015	C	C_CM-IAM-NL	Artefactos en Cys: C_DHA	
+-320.172758	C	C_CM-IAM-NL	Artefactos en Cys: C_DHA-TMT	
+0.98554	C	C_CM-IAM-NL	Artefactos en Cys: C_CM/DEA	
+155.179435	C	C_CM-IAM-NL	Artefactos en Cys: C_UK	
+120.022358	C	C_CM-IAM-NL	Artefactos en Cys: C_DTT	
+1.986792	C	C_CM-IAM-NL	Artefactos en Cys: C_2DEA	
+-148.032887	C	C_CM-IAM-NL	Artefactos en Cys: C_DHA+C_-IAM	
+-246.189985	Q	Cyclation_Nterm-C-Q	C y Q en N-term ciclados y no marcados	1
+-246.189985	C	Cyclation_Nterm-C-Q	C y Q en N-term ciclados y no marcados	1
+0.98554	Q	DEA_2DEA	Deamidaciones en general	
+0.98554	N	DEA_2DEA	Deamidaciones en general	
+1.986792	N	DEA_2DEA	Deamidaciones en general	
+1.986792	QDEA_2DEA	Deamidaciones en general	
+-357.259079		DigPar (-K+TMT)	Dihestión parcial	
+15.993412	M	M_ox,C_ox	Oxidación en M,Oxidación en C	
+15.993412	C	M_ox,C_ox	Oxidación en M,Oxidación en C	
+16.980965	M	M_OX+DEA	En M : OX+DEA	
+16.980965	N	M_OX+DEA	En  N: OX+DEA	
+32.991275	M	M_2OX+DEA/M_2OX+2DEA	En M: 2OX+DEA	
+32.991275	N	M_2OX+DEA/M_2OX+2DEA	En N: 2OX+DEA	
+33.95246547	M	M_2OX+DEA/M_2OX+2DEA	En M : 2OX+2DEA	
+33.95246547	N	M_2OX+DEA/M_2OX+2DEA	En N: 2OX+2DEA	
+57.021005	M	M_IAM_CM	Artefactos por IAM y urea en M: M_IAM	
+57.021005	H	H_IAM_CM	Artefactos por IAM y urea en H: H_IAM	
+57.021005	K	K_IAM_CM	Artefactos por IAM y urea en K: K_IAM	
+58.006072	M	M_IAM_CM	Artefactos por IAM y urea en M: M_CM	
+58.006072	H	H_IAM_CM	Artefactos por IAM y urea en H: H_CM	
+58.006072	K	K_IAM_CM	Artefactos por IAM y urea en K: K_CM	
+100.015262	S	T_100.01,S_100.01	Artefactos por hidorxilamina	
+100.015262	T	T_100.01,S_100.01	Artefactos por hidorxilamina	
+229.162594		TMT	Sobre-marcaje	
+230.150072	SN	TMT+DEA	Sobre-marcaje+DEA (sin C)	
+230.150072	T	TMT+DEA	Sobre-marcaje+DEA (sin C)	
+230.150072	Y	TMT+DEA	Sobre-marcaje+DEA (sin C)	
+230.150072	N	TMT+DEA	Sobre-marcaje+DEA (sin C)	
+-228.177409		(-TMT+DEA)	No marcado+DEA
+-129.14713	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	
+-129.14713		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-114.137012	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.
+-114.137012		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-147.157817	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.
+-147.157817		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-113.152907	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	
+-113.152907		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-203.183662	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.
+-203.183662		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-128.146038	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	
+-128.146038		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-187.153235	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.
+-187.153235		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-157.142248	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	
+-157.142248		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-95.150944	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.
+-95.150944		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-141.078696	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	
+-141.078696		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-172.142429	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	
+-172.142429		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-186.157635	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	
+-186.157635		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1
+-171.159939	K	TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.
+-171.159939		TMT-fragments	Artefactos asociados al TMT de masa teórica desconocida.	1

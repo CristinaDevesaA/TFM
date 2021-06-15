@@ -1,0 +1,117 @@
+d	Lab_User_label	Residue
+ 	NoLab
+-458.325864	TMT-derived(-TMT(2))	"N-term,K"
+-442.330949	TMT-derived(-TMT(2)+O)	"N-term,K"
+-422.325864	K-1-amino-3-iminopropene-K crosslink+2TMT-loss	K
+-421.341848	K-1-amino-3-iminopropene-K crosslink+2TMT-loss+DEA	K
+-406.330949	K-1-amino-3-iminopropene-K crosslink+2TMT-loss+OX	K
+-404.315299	N-propenal+2-TMT-loss	K
+-403.331283	N-propenal+2-TMT-loss+DEA	K
+-388.320384	N-propenal+2-TMT-loss+OX	K
+-376.312384	TMT-derived	"N-term,K"
+-360.330488	TMT-derived	"C or Q on N-term, K"
+-359.333453	TMT-derived	"C or Q on N-term, K"
+-350.304734	2N-propenal +2TMT-loss	K
+-344.276762	TMT-derived	"N-term,K"
+-320.172118	Cys-> Dha -TMT	C
+-246.189481	TMT-derived	C or Q on N-term
+-230.194566	TMT-derived	C or Q on N-term
+-229.162932	TMT-derived	"N-term,K"
+-228.282014	TMT-derived	"N-term,K"
+-217.162932	TMT-derived ('-TMT+C)	N-term
+-214.199652	Lys->AminoadipicAcid	K
+-213.168017	TMT-derived (O-TMT)	N-term
+-203.18058	TMT-derived	"N-term,K"
+-201.168017	Formyl	K
+-201.168017	TMT-derived (formyl-TMT)	N-term
+-197.173102	TMT-derived (O(2)-TMT)	"N-term,K"
+-187.185665	TMT-derived	"N-term,K,M"
+-187.152367	Acetyl	K
+-186.154031	TMT-derived	"N-term,K"
+-175.152367	N-propenal+1TMT-loss	K
+-174.168351	N-propenal+1TMT-loss+DEA	K
+-172.138381	TMT-derived	"N-term,K"
+-170.159116	TMT-derived	"N-term,K,M"
+-159.157452	N-propenal+1TMT-loss+OX	K
+-157.133802	TMT-derived	"N-term,K"
+-156.143466	TMT-derived	"N-term,K,M"
+-147.149452	TMT-derived	"N-term,K"
+-143.162537	N-propenal+1TMT-loss+2OX	K
+-143.126153	2-hydroxyisobutyrylation	K
+-141.138887	TMT-derived	N-term M
+-129.138887	TMT-derived	"N-term,K"
+-121.141803	HydroxymethylOP	K
+-115.120005	GG	K
+-114.141007	TMT-derived	"N-term,K"
+-113.143972	TMT-derived	"N-term,K"
+-112.138097	HCysThiolactone	K
+-103.009185	Cys->Gly-IAM	C
+-98.146092	TMT-derived	"N-term,K"
+-97.14905703	TMT-derived	"N-term,K"
+-95.14234703	TMT-derived	N-term
+-94.13899203	TMT-derived	N-term
+-91.009186	Cys-> Dha 	C
+-90.025169	Cys->PyruvicAcid-IAM	C
+-88.993535	Cys->Ala-IAM	C
+-82.151177	TMT-derived	"N-term,K"
+-75.014270	Cys->Oxoalanine-IAM	C
+-72.998620	Cys->Ser-IAM	C
+-72.11742303	TMT-derived	"N-term,K"
+-67.110108	Hex	K
+-62.977885	Cys->Pro-IAM	C
+-60.962235	Cys->Val-IAM	C
+-59.037114	S-S->Thioaldehyde	C
+-58.982970	Cys->Thr-IAM	C
+-56.12250803	TMT-derived	"N-term,K"
+-46.946584	Cys->Xle-IAM	C
+-45.987721	Cys->Asn-IAM	C
+-45.003705	C->D-IAM	C
+-33.987721	"C_reduced (loss of oxidized, alkylated cysteine)"	C
+-31.972071	Cys->Gln-IAM	C
+-31.935685	Cys->Lys-IAM	C
+-30.988055	Cys->Glu-IAM	C
+-28.990164	Cys->Met-IAM	C
+-25.031634	C_sulfinic	C
+-22.971737	Cys->His-IAM	C
+-22.067486	2DTT-sensitive C ox	C
+-12.995249	Cys->MetOx-IAM	C
+-12.962235	Cys->Phe-IAM	C
+-11.033743	DTT-sensitive C ox	C
+-9.036719	C_sulfonic	C
+-3.929537	Cys->Arg-IAM	C
+-2.015650	S-S->Thioaldehyde; water-loss +ox	C
+-1.031634	ammonia-loss+ox	NA
+-1.012295	water-loss +ox+C13	NA
+-0.028279	ammonia-loss+ox+C13	NA
+3.032680	Cys->Tyr-IAM	C
+4.978931	KYN+DEA	W
+26.048664	Cys->Trp-IAM	C
+36.000000	K-1-amino-3-iminopropene-K crosslink	K
+49.955943	Cl+O	"W,Y"
+54.010565	N-propenal	K
+57.024551	TMT-derived	"S,H,T,K,M"
+61.982636	MMTS+O	C
+71.032095	TMT-derived	"N-term,K"
+72.02912997	TMT-derived	"S,H,W,Y,M"
+73.016379	IAM+O	C
+73.019466	TMT-derived	M
+89.014381	TMT-derived	M
+91.975442	MMTS(2)	C
+100.024045	TMT-derived	"S,T"
+152.980587	C_disulfur (CarbamidomethylDTT)+DEA	C
+154.065171	LRGG	K
+168.080821	K_LRGG+methyl	K
+182.096471	K_LRGG+dimethyl	K
+197.227247	Cys->Glu+TMT-IAM	C
+209.018035	DTT+IAM	C
+230.146948	TMT-derived	"N-term,K"
+244.173831	NH+TMT	Y
+245.157847	TMT-derived	"N-term,K"
+246.189481	TMT-derived	"N-term,K"
+261.152762	TMT-derived	"N-term,K"
+261.152762	TMT-derived	"N-term,K"
+286.184396	TMT-derived	"N-term,K"
+297.084987	+TMT+CL(2)	Y
+297.084987	TMT-derived	Y
+298.069003	+TMT+CL(2)+DEA	Y
+458.325864	TMT-derived	"S,T"
