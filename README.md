@@ -1,4 +1,4 @@
-# developed tools for PTMs identification and characterization improvement. 
+# Developed tools for PTMs identification and characterization improvement. 
 
 
 Post-translational modifications play a very important role in multiple diseases. In order to improve its identification and quantification, 
