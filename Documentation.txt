@@ -6,13 +6,13 @@ FDRFilterer.
 
 FDRFilterer filters FDR according to the conditions set by the user, in the configuration file.
 
-Input files:Ê
+Input files:
     * .tsv , for example output file of PeakFDRer, but other can be use.
     * Configuration file (.ini). Default configuration file can be modified by user.
-      o FDRFiltererÊparameters:
-        * GlobalThres:ÊÊglobal FDR threshold. Maximum Global FDR.
-        * PeakThres:Êpeak FDR threshold. Maximum Peak FDR.
-        * LocalThres:Êlocal FDR threshold. Maximum Local FDR.
+      o FDRFilterer parameters:
+        * GlobalThres: global FDR threshold. Maximum Global FDR.
+        * PeakThres: peak FDR threshold. Maximum Peak FDR.
+        * LocalThres: local FDR threshold. Maximum Local FDR.
         * GlobalFDR_column_name: name of the column containing Global FDR values.
         * PeakFDR_column_name:name of the column containing Peak FDR values.
         * LocalFDR_column_name:name of the column containing Local values.
@@ -20,25 +20,25 @@ Input files:Ê
         * decoys_naming: parameter that indicates how decoys are named.
       
 Output files:
-    * FDRFiltererÊoutput (default suffix: ÒFDRFiltereredÓ)Ê
-    * A log file (default suffix: "ÊFDRFilterered_logFile")Ê
+    * FDRFilterer output (default suffix: FDRFilterered)
+    * A log file (default suffix: "FDRFilterered_logFile")
 
 DM0Solver
-DM0Solver is a module that detects whetherÊa modified peptide, termed as pdm (a peptide form defined by peptide sequence, from here on, has aÊ?mass belonging to a list provided by the user , for that purpose relative error (ppm) is calculated. In such a case, theÊ?mass is appended at the end of the clean sequence (new output column). The corresponding label and the error generated selecting that label are added in two additional columns . If the ?mass does not belong to the list, the module passes the modified sequence without any modification to the output columns. To carry out these tests, the relative error (ppm) must be calculated:
+DM0Solver is a module that detects whether a modified peptide, termed as pdm (a peptide form defined by peptide sequence, from here on, has a deltamass belonging to a list provided by the user , for that purpose relative error (ppm) is calculated. In such a case, the deltamass is appended at the end of the clean sequence (new output column). The corresponding label and the error generated selecting that label are added in two additional columns . If the ?mass does not belong to the list, the module passes the modified sequence without any modification to the output columns. To carry out these tests, the relative error (ppm) must be calculated:
 
 DM0Solver needs the following input files:
-    * .tsvÊfile, for instance ouput file of FDRFilterer. 
+    * .tsv file, for instance ouput file of FDRFilterer. 
     * Configuration file (.ini), a default configuration file that can be modified by user, containing:
       o DM0Solver parameters:
         * Relative_Error_ppm: relative error (ppm) allowed.
         * Exp_mh_column_name: calibrated experimental mh column name.
-        * Theo_mh_column_name: theoreticalÊmhÊcolumn name.
-        * Sequence_column_name: sequence with ?massÊcolumnÊname. 
+        * Theo_mh_column_name: theoretical mh column name.
+        * Sequence_column_name: sequence with delta mass column name. 
         * DM0Sequence_output_column_name: column name of the output in which the selected sequence is annotated.
         * DM0Label_output_column_name: column name of the output in which the chosen label is annotated.
         * DM0Label_ppm_output_column_name: column name of the output in which the calculated error in ppm is annotated.
-        * output_file_suffix:Êchosen suffix for output file.
-Ê
+        * output_file_suffix: chosen suffix for output file.
+
       o DM0Solver list (list of masses with their corresponding label):
         The first column should show examples of labels , while the second column contains de mass in Da of each label. DM0Solver uses this list to assign a label, as long as it meets the error threshold.
 
@@ -54,180 +54,179 @@ It delivers two output files:
 
 
 
-TrunkSolverÊ
-TrunkSolver detects whether the deltamass, in a pdm element may be explained by the truncation of a non-modified peptide inside the sequence of the corresponding proteinÊor, by a truncation and the presence of a delta mass belonging to a list provided by the user , for that purpose relative error (ppm) is calulated. In such a case, the deltamass is appended at the end of the clean sequence (ÒTrunkSequence output column), whileÊthe corresponding label and the recalculatedÊ?mass are added in additional columns named ÒTrunkLabelÓ and TrunkDM, respectively. If TrunkSolverÊis unable to explain the deltamas  by a truncation, then it passes the modified sequence and its originalÊ?mass without any modification to the output columns.ÊIn both cases five extra columns.(New_DM,New_Theo_mh,Match_number, Possible_option, Trunk_stats_mods) will be creatednfor subsequent PeakAssignatior (Andrea Laguillo ongoing thesis) execution, which is necessary for the correct peak assignation.ÊRelative error will be calculated as: 
+TrunkSolver 
+TrunkSolver detects whether the deltamass, in a pdm element may be explained by the truncation of a non-modified peptide inside the sequence of the corresponding protein or, by a truncation and the presence of a delta mass belonging to a list provided by the user , for that purpose relative error (ppm) is calulated. In such a case, the deltamass is appended at the end of the clean sequence (ÒTrunkSequence output column), whileÊthe corresponding label and the recalculated deltamass are added in additional columns named ÒTrunkLabelÓ and TrunkDM, respectively. If TrunkSolver is unable to explain the deltamas  by a truncation, then it passes the modified sequence and its original deltamass without any modification to the output columns. In both cases five extra columns.(New_DM,New_Theo_mh,Match_number, Possible_option, Trunk_stats_mods) will be creatednfor subsequent PeakAssignatior (Andrea Laguillo ongoing thesis) execution, which is necessary for the correct peak assignation. Relative error will be calculated as: 
 
 
-TrunkSolverÊneeds as input files: 
+TrunkSolverneeds as input files: 
     * .tsv file 
     * .fasta file 
     * MassMod.ini. Default configuration file can be modified by user.
     * Configuration file (.ini). Default configuration file can be modified by user:
-      o TrunkSolverÊparameters:
+      o TrunkSolver parameters:
         * Relative_Error_ppm: relative error (ppm) allowed.
         * Exp_mh_column_name: calibrated experimental mh column name.
-        * Theo_mh_column_name: theoreticalÊmhÊcolumn name.
-        * Sequence_column_name: sequence with ?mass column name.
+        * Theo_mh_column_name: theoretical mh column name.
+        * Sequence_column_name: sequence with deltamass column name.
         * Calibrated_Delta_MH_column_name: calibrated deltamass mh column name.
-        * MasterProtein_column_name:Êmaster Protein column name.
+        * MasterProtein_column_name: master Protein column name.
         * static_modifications_column_name: static modifications column name.
-        * Decnum:Êdecimals points required inÊTrunkSequenceÊcolumn.
-        * X:Ê number of positions to the right and left,Êthat the TrunkSolver is allowed to extend from the original ?mass site.
+        * Decnum: decimals points required in TrunkSequence column.
+        * X: number of positions to the right and left, that the TrunkSolver is allowed to extend from the original deltamass site.
         * New_Deltamass_output_column_name: new deltamass column name.
         * New_Theo_mh_output_column_name: new theoretical mh column name.
         * TrunkSequence_output_column_name: column name of the output where the chosen sequence is annotated.
-        * TrunkDM_output_column_name: column name of the output where the recaulcutaed ?mass is annotated, taking in to account the label.
+        * TrunkDM_output_column_name: column name of the output where the recaulcutaed deltamass is annotated, taking in to account the label.
         * TrunkLabel_output_column_name: column name of the output where the chosen label is annotated.
         * TrunkLabel_ppm_output_column_name: column name of the output where the calculated error in ppm is annotated.
         * Static_modifications_position_output_column_name: column name of the output where the new fix modifications positions are annotated
         * Matchnumber_output_column_name: column name of the output where possible options number is annotated.
         * Possible_option_output_column_name: column name of the output where all possible options.
-        * output_file_suffix:ÊÊchosen suffix for output file.
-Ê
-     o TrunkSolverÊlist (list of masses with their corresponding label).
+        * output_file_suffix: hosen suffix for output file.
+
+     o TrunkSolver list (list of masses with their corresponding label).
       .The first column must contain labels,  and the second de delta mass.
 
 
 
 TrunkSolver delivers the following output files: 
-    * TrunkSolverÊoutput (default suffix: _TS)
-      o New columns:Ê
-        * TrunkSequence: output column name in which reassigned sequenceÊis annotated
-        * Trunk_DM:  output column name in which recalculated ?mass taking in to account the labels.
-        * Trunk_Label: output column name in which the selected labelÊis saved.  If the ?mass corresponds to a combination between one of the labels in the configuration file and a cut, the type of cut also will be noted. The label will be TrypticCut if the choice of label involves a tryptic cut of the sequence, or a Truncation if it involves a non-tryptic cut.
+    * TrunkSolver output (default suffix: _TS)
+      o New columns: 
+        * TrunkSequence: output column name in which reassigned sequence is annotated
+        * Trunk_DM:  output column name in which recalculated deltamass taking in to account the labels.
+        * Trunk_Label: output column name in which the selected label is saved.  If the deltamass corresponds to a combination between one of the labels in the configuration file and a cut, the type of cut also will be noted. The label will be TrypticCut if the choice of label involves a tryptic cut of the sequence, or a Truncation if it involves a non-tryptic cut.
         * Trunk_Label_ppms: output column in which the error, that is obtained selecting the label, is annotated.
         * New_Theo_Mh: output column name in which the recalculated theoretical mass is annotated.
-        * New_DM:Êoutput column name in which the recalculated ?massÊis saved.
-        * Trunk_stats_mods:  output column name in which the new static modificationsÊpositionsÊare saved, since with the changes in the sequence this could vary.
-        * Match_number: output column nameÊin which the number of possible optionsÊallowed byÊTrunkSolverÊis annotated. 
-       * Possible_options: output column name in which allÊpossible optionsÊallowedÊby TrunkSolverÊare annotated
+        * New_DM: output column name in which the recalculated deltamass is saved.
+        * Trunk_stats_mods:  output column name in which the new static modifications positions are saved, since with the changes in the sequence this could vary.
+        * Match_number: output column name in which the number of possible options allowed by TrunkSolver is annotated. 
+       * Possible_options: output column name in which all possible options allowed by TrunkSolver are annotated
        * A log file (default suffix: "TS_logFile") 
 
       
 
 
 
-PDMTableMaker, SiteSolverÊ
-PDMTableMakertMaker is an independent, but necessary, module for the properÊoperationÊofÊSiteSolver.ÊÊPDMTableMakerÊcontains the frequencies of the different sequence species (pdm) which allowsÊSiteSolverÊto choose when there is a tie between two positions.Ê SiteSolverÊwill correctÊ?mass positions whenever appropriate.Ê
-Ê
-PDMTableMakerÊ
-PDMTableMaker calculates the scan frequency which is used by SiteSolver but also some parameters that will allow to build the necessary relations files for the subsequent processing of the results by the statistical quantitation workflow, as it will be later explained: Êp,Êq,Êpdm,Êpd,Êd,ÊTheo_mh,ÊScanFreq,Êa,Êm,Ên,Êl,Êqna,Êqdna, A,ÊM,ÊL,ÊN,ÊqdNA.Ê
+PDMTableMaker, SiteSolver
+PDMTableMakertMaker is an independent, but necessary, module for the proper operation of SiteSolver.PDMTableMaker contains the frequencies of the different sequence species (pdm) which allows SiteSolver to choose when there is a tie between two positions.  SiteSolver will correct deltamass positions whenever appropriate.
 
-PDMTableMakerÊinput files:Ê
-     * tsvÊfile.
-     * .fasta file.Ê
-     * Configuration file (.ini). Default configuration file can be modified by user:Ê
-       o PDMTableMakerÊparameters:Ê
-         * Sequence_column_name:Ê Sequence that contains the ?mass colum name.
-         * DM_column_name:Ê ?mass column name.Ê
-         * Theo_mh_column_name:ÊTheoretical mh column name.ÊÊ
-         * MasterProtein_column_name:ÊÊMaster Protein column name.
-         * output_file_suffix:ÊÊChosen suffix for output file.Ê
-       o PDMTableMakerÊconditions:ÊÊ
-         * number_of_conditions: Number of conditions considered.Ê
-         * Conditioni:Ê Column nameÊof condition i.ÊÊ
-         * Valuei: Chosen value for conditionÊi.
-The program can use as many conditions as it is desired, considering that a match will be made between the conditioni and the valuei.Ê
+PDMTableMaker
+PDMTableMaker calculates the scan frequency which is used by SiteSolver but also some parameters that will allow to build the necessary relations files for the subsequent processing of the results by the statistical quantitation workflow, as it will be later explained: p,q,pdm,pd,d,Theo_mh,ScanFreq,a,m,n,l,qna,qdna, A,M,L,N,qdNA.
 
-PDMTableMaker delivers two output files:Ê
-    * PDMTableMakerÊoutput (default suffix: ÒPDMÓ). .
-      o New columns:Ê
-        * p:Êpeptide.
-        * pdm: peptide form defined by peptide sequence, ?mass and position. Ex: ABCD[xxx]EFGHK.
-        * pd:ÊABCEDEFGHK:XXX (includes a set of pdm elements, do not confound with ABCEDEFGHK_XXX, which is a pdm, not a pd)Ê
-        * m:Êposition in peptide. Ct (C-terminal) =-1, Nt (Nterminal)=0.Ê
-        * l:Êposition in peptide, from right to left. Ct=,0ÊNt =Ê-1.
-        * n:Êposition in protein. Ct =length peptide plus 1, Nt =Ê0.
-        * a:Êmodified aminoacid. Ct = U, Nt = U.
-        * q:ÊproteinÊidentifier.
-        * M:Êit is the m corresponding to the pdm with highest original PSM frequency in a pdm table.
-        * L:Ê  l which corresponds with the razor m. Razor l, property of a pd.
-        * N:Ê n which corresponds with the razor m. Nt=0.ÊRazor n, property of a pd.
-        * A:Ê a which corresponds with the razor m. Razor a, property of a pd.Ê
-        * qdna:Êinformation of q,d,n,aÊ(ex: HPT:yyy:300:M)Ê
-        * qna:Êinformation of q,n,aÊ(ex: HPT: 300:M)Ê
-        * qdNA:Êrazor qdna, property of a pdÊ
-        * Theo_mh:ÊTheoretical mhÊÊ
-       * ScanFreq:ÊScan frequencyÊ
-      Ê
-    * A log file (default suffix: "ÊPDM_logFile")Ê
+PDMTableMaker input files:
+     * tsv file.
+     * .fasta file.
+     * Configuration file (.ini). Default configuration file can be modified by user: 
+       o PDMTableMaker parameters: 
+         * Sequence_column_name:  Sequence that contains the deltamass colum name.
+         * DM_column_name: delta mass column name.
+         * Theo_mh_column_name: Theoretical mh column name.
+         * MasterProtein_column_name:Master Protein column name.
+         * output_file_suffix: Chosen suffix for output file.
+       o PDMTableMaker conditions:
+         * number_of_conditions: Number of conditions considered. 
+         * Conditioni Column name of condition i
+         * Valuei: Chosen value for condition i.
+The program can use as many conditions as it is desired, considering that a match will be made between the conditioni and the valuei.
 
-
-SiteSolverÊ
-SiteSolverÊis a module made with the aim of detecting if a modified peptide has itsÊ?massÊin an incorrect position. In such a case, ?mass locationÊwithin the sequence is correctedÊin theÊÒSiteSequenceÓÊcolumn.ÊÊIf the module does not find any possible position, it passes the modified sequence without any modification to the output column.ÊForemost, it is ascertainedÊwhetherÊthe amino acid position, in which theÊ?massÊis originally located, is prohibited. This is tested up using theÊfrequency chosen in theÊPrimaryListÊfile (PrimaryList_colum_name)Êand ScanFrequency ofÊPDMTableMaker ouput file. From the lists, the mass with the lowest relative error of place will be chosen.. If the amino acid is allowed, for thatÊ?mass, it passes the modified sequence without any modification.ÊIfÊthe amino acid is prohibited,ÊSiteSolverÊwill analyze the contiguous amino acids to that position.ÊProvided thatÊonly one of them is prohibited the sequenceÊwill beÊcorrected by assigning theÊ?massÊto the amino acid that is allowed, according toÊPrimaryList or SecondayListÊfile. IfÊbothÊareÊallowed, for thatÊ?mass, the position with the highest frequency in theÊPDMTableMaker outputÊfileÊis chosen, but if the frequencies are equal, it will be taken into accountÊtheÊorder of appearance in theÊPrimaryList or SecondayListÊfile.ÊIfÊnone of the amino acids are allowed, theÊcontiguous, at each end, will be analyzed. The process is repeated until the number of positions to be analyzed, on each side, exceeds the maximum (X parameter). To carry out these tests, the relative error must be calculated:Ê
+PDMTableMaker delivers two output files:
+    * PDMTableMaker output (default suffix: _PDM). .
+      o New columns:
+        * p: peptide.
+        * pdm: peptide form defined by peptide sequence, deltamass and position. Ex: ABCD[xxx]EFGHK.
+        * pd: ABCEDEFGHK:XXX (includes a set of pdm elements, do not confound with ABCEDEFGHK_XXX, which is a pdm, not a pd)
+        * m: position in peptide. Ct (C-terminal) =-1, Nt (Nterminal)=0
+        * l: position in peptide, from right to left. Ct=,0 Nt = -1.
+        * n: position in protein. Ct =length peptide plus 1, Nt = 0.
+        * a: modified aminoacid. Ct = U, Nt = U.
+        * q: protein identifier.
+        * M: it is the m corresponding to the pdm with highest original PSM frequency in a pdm table.
+        * L:   l which corresponds with the razor m. Razor l, property of a pd.
+        * N:  n which corresponds with the razor m. Nt=0.Razor n, propert y of a pd.
+        * A:a which corresponds with the razor m. Razor a, property of a pd.
+        * qdna: information of q,d,n,a (ex: HPT:yyy:300:M)
+        * qna: information of q,n,a (ex: HPT: 300:M)
+        * qdNA: razor qdna, property of a pd
+        * Theo_mh: Theoretical mh
+       * ScanFreq: Scan frequency 
+      
+    * A log file (default suffix: "_PDM_logFile")
 
 
-Ê
+SiteSolver 
+SiteSolver is a module made with the aim of detecting if a modified peptide has its deltamass  in an incorrect position. In such a case, deltamass location within the sequence is corrected in the SiteSequence column.If the module does not find any possible position, it passes the modified sequence without any modification to the output column.Foremost, it is ascertained whether the amino acid position, in which the deltamass is originally located, is prohibited. This is tested up using the frequency chosen in the PrimaryList file (PrimaryList_colum_name) and ScanFrequency of PDMTableMaker ouput file. From the lists, the mass with the lowest relative error of place will be chosen. If the amino acid is allowed, for that deltamass, it passes the modified sequence without any modification. If the amino acid is prohibited, SiteSolver will analyze the contiguous amino acids to that position. Provided that only one of them is prohibited the sequence will be corrected by assigning the deltamass to the amino acid that is allowed, according to PrimaryList or SecondayList file. If both are allowed, for that deltamass, the position with the highest frequency in the PDMTableMaker output file is chosen, but if the frequencies are equal, it will be taken into account the order of appearance in the PrimaryList or SecondayList file. If none of the amino acids are allowed, the contiguous, at each end, will be analyzed. The process is repeated until the number of positions to be analyzed, on each side, exceeds the maximum (X parameter). To carry out these tests, the relative error must be calculated:Ê 
 
-SiteSolverÊneeds the following input files:Ê
-    * .tsvÊfile.
-    * PDMTableMaker outputÊfile.
-    * PrimaryList.txtÊfileÊ(user).
-    * SecondaryList.txt file (unimod).Ê
- 	Secondary and Primary lists will contain 3 columns:ÊÊ
-           1) DM: first column must contain the ?mass.
-           2) Residue:  second column must contain the residue. In case of N-terminal and C-terminal, must appear, NT and CTÊrespectively.
-    * Configuration file (.ini). Default configuration file can be modified by user:Ê
-      o SiteSolverÊparameters:ÊÊÊÊÊÊÊÊÊ
-        * Relative_Error_ppm:Êrelative error (ppm) allowed.
-        * Theo_mh_column_name:ÊÊtheoretical mh column name. ÊÊ
-        * Sequence_column_name:Êsequence with ?mass column name.Ê
-        * cal_Dm_mh_column_name:Êcalibrated ?mass MH name.
-        * PeakNaming:ÊParameter that indicates how peaks are named.
-        * PeakAssignation_column_name:Êname of column that contains peak assignation.
-        * x:Êparameter that indicates the extension (left and right) from the original DM site of the amino acid positions to be analyzed.
-        * MinScanFreq:Êparameter that indicates the frequency threshold for PDMTableMaker output file.Ê
-        * MaxNSite:Êparameter that indicates the number of amino acids allowed whenÊthe PDMTableMaker output fileÊis analyzed.
-        * PrimaryList_column_name:Êcolumn name from Primary List wanted to be used for SiteSolver.
-        * SecondaryList_column_name:Êcolumn name from Secondary List wanted to be used for SiteSolver.
-        * SiteCorrection_PrimaryList_label: SiteCorrection when the SiteList selected isÊfrom the Primary list.
+
+SiteSolver needs the following input files:
+    * .tsv file.
+    * PDMTableMaker output file.
+    * PrimaryList.txt file (user).
+    * SecondaryList.txt file (unimod).
+ 	Secondary and Primary lists will contain 3 columns:
+           1) DM: first column must contain the deltamass.
+           2) Residue:  second column must contain the residue. In case of N-terminal and C-terminal, must appear, NT and CT respectively.
+    * Configuration file (.ini). Default configuration file can be modified by user:
+      o SiteSolver parameters:
+        * Relative_Error_ppm: relative error (ppm) allowed.
+        * Theo_mh_column_name: theoretical mh column name. 
+        * Sequence_column_name: sequence with deltamass column name.
+        * cal_Dm_mh_column_name: calibrated deltamass MH name.
+        * PeakNaming: Parameter that indicates how peaks are named.
+        * PeakAssignation_column_name: name of column that contains peak assignation.
+        * x: parameter that indicates the extension (left and right) from the original DM site of the amino acid positions to be analyzed.
+        * MinScanFreq: parameter that indicates the frequency threshold for PDMTableMaker output file.
+        * MaxNSite: parameter that indicates the number of amino acids allowed when the PDMTableMaker output file is analyzed.
+        * PrimaryList_column_name: column name from Primary List wanted to be used for SiteSolver.
+        * SecondaryList_column_name: column name from Secondary List wanted to be used for SiteSolver.
+        * SiteCorrection_PrimaryList_label: SiteCorrection when the SiteList selected is from the Primary list.
         * SiteCorrection_SecondaryList_label: SiteCorrection when the SiteList selected is from the Secondary list.
-        * SiteSequence_column_name:Êcolumn name of the output in which the sequence is annotated.
-        * SiteCorrection_column_name:Êcolumn name of the output in which the correction site is annotated,
-        * SiteOption_column_name:Êcolumn name of the output in which the different possible options are annotated.
-        * SiteDM_column_name:Êcolumn name of the output in which the selected ?mass is annotated.
-        * SiteDMError_ppm_column_name:Êcolumn name of the output where the error of the selected DM is annotated.
-        * Output_file_suffix:Êchosen suffix for output file.Ê
-Ê
-SiteSolver delivers two output files:Ê
-    * SiteSolverÊoutput (default suffix: ÒSSÓ)Ê
-    o New output columns:ÊÊ
-       * SiteSequence:Êsequence with the ?mass.
-       * SiteCorrection:Êinitial residue (position that has been displaced) and final residue.
-       * SiteOption:Êif there is a tie, which are all the possible options.
+        * SiteSequence_column_name: column name of the output in which the sequence is annotated.
+        * SiteCorrection_column_name: column name of the output in which the correction site is annotated,
+        * SiteOption_column_name: column name of the output in which the different possible options are annotated.
+        * SiteDM_column_name: column name of the output in which the selected dltamass is annotated.
+        * SiteDMError_ppm_column_name: column name of the output where the error of the selected DM is annotated.
+        * Output_file_suffix: chosen suffix for output file.
 
-    * A log file (default suffix: "ÊSS_logFile")Ê
+SiteSolver delivers two output files:
+    * SiteSolver output (default suffix: _SS)
+    o New output columns:
+       * SiteSequence:s equence with the deltamass.
+       * SiteCorrection: initial residue (position that has been displaced) and final residue.
+       * SiteOption: if there is a tie, which are all the possible options.
 
-
-StickerÊ
-Sticker is a module that for each experimentalÊ?mass detects,by calculating the relative error 
-the closest theoretical one from aÊDMID_listÊÊfile . This file will contain some conditions and labels. When comparing PDMTabelMaker output file with DMID_list, all the conditions established in DMID_list, the labelsÊand the error that produces the corresponding label selection,Êwill be annotated inÊnew columns.ÊTo do so,Êthe relative error will be calculated:Ê
+    * A log file (default suffix: "SS_logFile")
 
 
-As input files Sticker requires:Ê
+Sticker
+Sticker is a module that for each experimental deltamass detects,by calculating the relative error 
+the closest theoretical one from a DMID_list file . This file will contain some conditions and labels. When comparing PDMTabelMaker output file with DMID_list, all the conditions established in DMID_list, the labels and the error that produces the corresponding label selection, will be annotated in new columns. To do so,the relative error will be calculated:
+
+
+As input files Sticker requires:
     * PDMTableMaker output file 
     * DMID_list.txt:
-      o ColumnÊnames:Ê
-        * d:  Column with the ?mass.
-        * ÊCond_:ÊÊallÊcolumns with the conditions that mustÊbeÊmet, should start with ÒCond_a_Ó.ÊIfÊÒaÓÊhasÊto be met,ÊaÊcolumnÊnamed ÒCond_aÓÊmust appear inÊhe DMID_list.txt file.ÊIt should be noted that the columns denoting conditions must include after the prefix "Cond_" (condition), names of the columns present in PDMTableMaker, for instance "Cond_d", "Cond_p", "Cond_pdm". If the indicated parameter is not found in the PDMTableMaker file, the comparison will not be possible. The name of the columns that contains the label to be added will begin with the prefix "Lab_".
+      o Columnnames:
+        * d:  Column with the deltamass.
+        * Cond_: all columns with the conditions that must be met, should start with Cond_a_.If a has to be met,a column named Cond_a must appear in he DMID_list.txt file. It should be noted that the columns denoting conditions must include after the prefix "Cond_" (condition), names of the columns present in PDMTableMaker, for instance "Cond_d", "Cond_p", "Cond_pdm". If the indicated parameter is not found in the PDMTableMaker file, the comparison will not be possible. The name of the columns that contains the label to be added will begin with the prefix "Lab_".
 
-The label for those rows that do not have any label will be specified at the first line of the DMID_list file. All columns will be empty except for the first column that will start with ÒLab_Ó .
+The label for those rows that do not have any label will be specified at the first line of the DMID_list file. All columns will be empty except for the first column that will start with Lab_ .
 
-    * Configuration file (.ini). Default configuration file can be modified by user:Ê
-      o StickerÊparameters:Ê
-    * Relative_Error_ppm:Êrelative error (ppm) allowed.
-    * Theo_mh_column_name: theoretical mh column name. Ê Ê
-    * Sequence_column_name:Êsequence withÊ?mass column name.Ê
-    * Selected_DM_column_name:Êselected ?mass column name.
-    * StickerLabel_User_output_column_name:Ê column name of the output where the chosen labelÊis annotated.
-    * StickerLabel_ppm_User_output_column_name:Êcolumn name of the output where the calculated error in ppm for the selected labelÊis annotated.ÊÊ
-    * output_file_suffix:ÊÊchosen suffix for output file.Ê
-Ê
-It delivers two output files:Ê
-    * Sticker output (default suffix: ÒStickerÓ):Ê
-    o New columns:Ê
-       * StickerLabel:ÊselectedÊlabel from theÊuser file. It will appear as many StikerLabel columns as ÒLab_Ó columns appearÊinÊDMIDlist file.Ê
-       * StickerLabel_ppm:Êrelative error calculated with the mass ofÊthe selectedÊlabelÊfrom theÊuser file.ÊIt will appear as many StikerLabel_ppm columns as ÒLab_Ó columns appearÊinÊDMIDlist file.
+    * Configuration file (.ini). Default configuration file can be modified by user:
+      o Sticker parameters:
+    * Relative_Error_ppm: relative error (ppm) allowed.
+    * Theo_mh_column_name: theoretical mh column name. 
+    * Sequence_column_name: sequence with deltamass column name.
+    * Selected_DM_column_name: selected deltamass column name.
+    * StickerLabel_User_output_column_name:  column name of the output where the chosen label is annotated.
+    * StickerLabel_ppm_User_output_column_name: column name of the output where the calculated error in ppm for the selected label
+    is annotated.
+    * output_file_suffix: chosen suffix for output file.
+
+It delivers two output files:
+    * Sticker output (default suffix: _Sticker):
+    o New columns:
+       * StickerLabel: selected label from the user file. It will appear as many StikerLabel columns as Lab_ columns appear in DMIDlist file.
+       * StickerLabel_ppm: relative error calculated with the mass of the selected label from the user file. It will appear as many StikerLabel_ppm columns as ÒLab_Ó columns appear in DMIDlist file.
        * A log file (default suffix: "Sticker_logFile").
 
 
