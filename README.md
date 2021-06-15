@@ -2,8 +2,8 @@
 
 
 Post-translational modifications play a very important role in multiple diseases. In order to improve its identification and quantification, 
-several tools have been developed in this work: FDRFilterer, DM0Solver, TrunkSolver, PDmTablemaker, SiteSolver and Sticker. These modules are
-independent but we recommend their use in the previously initiated order. Before executing these programs, the row files of the mass spectrometer
+several tools have been developed in this work: FDRFilterer, DM0Solver, TrunkSolver, PDMTablemaker, SiteSolver and Sticker. These modules are
+independent but we recommend their use in the previously initiated order. Before executing these programs, the raw files of the mass spectrometer
 have been passed through Comet-PTM (https://github.com/CNIC-Proteomics/Comet-PTM) and some programs from a work in development (DMCalibrator, 
 DMModeller, PeakInspector, PeakSelector, PeakAssignator and PeakFDRer https://github.com/CNIC-Proteomics/SHIFTS-4). It should be noted that before
 and after SiteSolver, PeakAssigantor must be run again.
