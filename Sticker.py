@@ -195,10 +195,6 @@ def main(solverconfig,infile,CondFile):
 
 if __name__ == '__main__':
     
-    try:
-        remove('Solver.ini')
-    except:
-        None
 
     # parse arguments
     parser = argparse.ArgumentParser(
@@ -229,7 +225,7 @@ if __name__ == '__main__':
    
     # if something is changed, write a copy of ini
     if config.getint('Logging', 'create_ini') == 1:
-        with open(os.path.dirname(args.infile) + '/Solver.ini', 'w') as newconfig:
+        with open(os.path.dirname(args.infile) + 'config/Solver.ini', 'w') as newconfig:
             config.write(newconfig)
         
     # logging debug level. By default, info level
@@ -253,14 +249,5 @@ if __name__ == '__main__':
     #start main function
     logging.info('start script: '+"{0}".format(" ".join([x for x in sys.argv])))
     
-    # Configuration files are read   
-    try:
-        open('Solver.ini',"r")
-        solverini ='Solver.ini'
-        logging.info("Modified Solver configuration file is going to be use")
 
-
-    except:
-        open("config/Solver.ini","r")
-        solverini = "config/Solver.ini"
-    main(solverini, args.infile,args.conditionsfile)
+    main(args.config, args.infile,args.conditionsfile)

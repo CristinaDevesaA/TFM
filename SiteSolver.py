@@ -398,7 +398,7 @@ def main(file,infile1,PrimaryList,peptidesitelist,SecondaryList):
     SiteCorrection_PrimaryList_label = config["SiteSolver_Parameters"].get("SiteCorrection_PrimaryList_label") # Site List selected as a  Primary list
     SiteCorrection_SecondaryList_label = config["SiteSolver_Parameters"].get("SiteCorrection_SecondaryList_label")# Site List selected as a  Secondary list
   
-    
+
     logging.info("Reading PrimaryList")
     dicc_PrimaryList, dicc_PrimaryList_label = readSiteList(PrimaryList,PrimaryList_column_name, SiteCorrection_PrimaryList_label)
     logging.info("Reading SecondaryLis")
@@ -538,10 +538,7 @@ def main(file,infile1,PrimaryList,peptidesitelist,SecondaryList):
 
 if __name__ == '__main__':
 
-    try:
-        remove('Solver.ini')
-    except:
-        None
+
 
     # parse arguments
     parser = argparse.ArgumentParser(
@@ -574,7 +571,7 @@ if __name__ == '__main__':
    
     # if something is changed, write a copy of ini
     if config.getint('Logging', 'create_ini') == 1:
-        with open(os.path.dirname(args.infile) + '/Solver.ini', 'w') as newconfig:
+        with open(os.path.dirname(args.infile) + '/config/Solver.ini', 'w') as newconfig:
             config.write(newconfig)
         
     # logging debug level. By default, info level
@@ -600,15 +597,6 @@ if __name__ == '__main__':
     
     #start main function
     logging.info('start script: '+"{0}".format(" ".join([x for x in sys.argv])))
-    
-    # configuration files are read      
-    try:
-        open('Solver.ini',"r")
-        SiteSolverini='Solver.ini'
-        logging.info("Modified SiteSolverini configuration file is going to be use")
+
         
-    except:
-        open("config/Solver.ini","r")
-        SiteSolverini="config/Solver.ini"
-        
-    main(SiteSolverini, infile1, args.Primarylist, args.peptidesitelist, args.Secondarylist)
+    main(args.config, infile1, args.Primarylist, args.peptidesitelist, args.Secondarylist)

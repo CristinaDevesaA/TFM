@@ -25,10 +25,13 @@ import configparser
 from Bio import SeqIO
 import numpy as np 
 import pandas as pd 
+from pandas import ExcelWriter
 import argparse
 import os
 import logging
 from pathlib import Path
+import tkinter as tk
+
 
 
 
@@ -47,7 +50,7 @@ def readInfile(infile):
 
 
 
-def theoretical_mh_by_hand(subseq,label_mass,dic_mod,dic_aa,Mproton,Hydrogen,O2,decnum):
+def theoretical_mh_by_hand(subseq,label_mass,dic_mod,dic_aa,selectedaa,Mproton,Hydrogen,O2,decnum):
     
     """
     Theoretical mass is calculated taking into account fix modifications, label and subseq. This funtions returns theoretical
@@ -168,19 +171,21 @@ def Obtain_values(seq,MasterProtein_column,dic_fasta):
     """
     
     clean_seq = seq[:seq.find("[")]+seq[seq.find("]")+1:].upper() #The clean sequence is obtained.
+
     MasterProtein = MasterProtein_column.replace(" ","_")
     MasterProtein = MasterProtein.strip("\n").split("_")
     MasterProtein = MasterProtein[0]+"_"+MasterProtein[1] # The id is extracted from the Master Protein name 
 
 
+
+
     
     # The fasta sequence corresponding to this identifier is saved 
     for iden in dic_fasta:
-        if MasterProtein in iden:
-
+        if MasterProtein == iden:
             result = str(dic_fasta[iden].seq.upper()).replace("X","L")
             break
-    
+   
     pattern = re.compile(clean_seq.replace("L","l").replace("I","[IL]").replace("l","[IL]")) # Problems that may exist with leucine and isoleucine are solved
     
     dic_seqs = {}
@@ -226,13 +231,13 @@ def Obtain_values(seq,MasterProtein_column,dic_fasta):
 
 
 
-def best_combination(subseq,Exp_Mh,cont,j,Error,label_mass,dic_mod,dic_CombList,dic_aa,decnum,Mproton,Hydrogen,O2, distanceDMsub,distanceDM,x):
+def best_combination(subseq,Exp_Mh,cont,j,Error,label_mass,dic_mod,selectedaa,dic_CombList,dic_aa,decnum,Mproton,Hydrogen,O2, distanceDMsub,distanceDM,x):
     """
     Best_Combinations function returns the combinations of "Combination list" that give rise to an error less than or equal to the allowed and 
     variables that indicate  whether TrunkSolver should stop extending the length of the sequence being analyzed
     """
     # New subsequence mass is calulated by theoretical_mh_by_hand function
-    ther,newsequence,mods_position = theoretical_mh_by_hand(subseq,label_mass,dic_mod,dic_aa,Mproton,Hydrogen,O2,decnum) 
+    ther,newsequence,mods_position = theoretical_mh_by_hand(subseq,label_mass,dic_mod,dic_aa,selectedaa,Mproton,Hydrogen,O2,decnum) 
     
     # initial parameters are set 
     ngreater = 0
@@ -289,7 +294,7 @@ def best_combination(subseq,Exp_Mh,cont,j,Error,label_mass,dic_mod,dic_CombList,
 
 
 
-def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_CombList,dic_mod,NT_label,decnum,Mproton,Hydrogen,O2,Theo_mh,x):
+def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh,x):
     
    
     """
@@ -386,7 +391,7 @@ def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_
                         distanceDMsub = distanceDMsub2
                     
                     
-                    minimun_DiffPPM,TrunkSequence,TrunkDM,TrunkLabel,mods_position,Trunk_Label_ppm,j,New_DM, New_Theo_MH = best_combination(subseq,Exp_mh,int(cont),j,Error,float(NT_label),dic_mod,dic_CombList,dic_aa,decnum,Mproton,Hydrogen,O2,distanceDMsub,DMresultposition,x)
+                    minimun_DiffPPM,TrunkSequence,TrunkDM,TrunkLabel,mods_position,Trunk_Label_ppm,j,New_DM, New_Theo_MH = best_combination(subseq,Exp_mh,int(cont),j,Error,float(NT_label),dic_mod,selectedaa,dic_CombList,dic_aa,decnum,Mproton,Hydrogen,O2,distanceDMsub,DMresultposition,x)
                     
                     if TrunkSequence != "" and j == "": # if best_combination  function finds a possible solution 
                        
@@ -470,6 +475,49 @@ def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_
 
 
 
+
+
+
+def applyTSSolver(row,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh_column_name,Delta_MH_cal_column_name,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh_column_name,x,TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name,Possible_option_output_column_name,fix_mod_column_name):
+    
+    
+        
+    if row[Seq_column_name].find("_") != -1: # If another program has already corrected it, TrunkSolver does not annote anything new
+        final_TrunkSequence = row[Seq_column_name]
+        final_TrunkDM = row[Delta_MH_cal_column_name]
+        final_TrunkLabel = " "
+        final_mods_position = row[fix_mod_column_name]
+        final_Trunk_Label_ppm = " "
+        match_number = 0
+        final_New_Theo_MH = row[Theo_mh_column_name]
+        final_New_DM = row[Delta_MH_cal_column_name]
+        addition = ""
+                
+
+    else:
+        dic_seqs,result=Obtain_values(row[Seq_column_name],row[MasterProtein_column_name],dic_fasta)
+        final_TrunkSequence,final_TrunkDM,final_TrunkLabel,final_mods_position,minimun,final_Trunk_Label_ppm,match_number,addition,final_New_DM,final_New_Theo_MH = TrunkSolver(row[Seq_column_name],dic_seqs,row[Exp_mh_column_name],row[Delta_MH_cal_column_name],result,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,row[Theo_mh_column_name],x)
+
+        
+        
+    if final_mods_position == " " or final_mods_position == "" :
+        final_mods_position = row[fix_mod_column_name]
+            
+    row[TrunkSequence_output_column_name] = final_TrunkSequence
+    row[TrunkDM_output_column_name] = final_TrunkDM
+    row[TrunkLabel_output_column_name] = final_TrunkLabel
+    row[TrunkLabel_ppm_output_column_name] = final_Trunk_Label_ppm
+    row[New_Theo_mh_output_column_name]= final_New_Theo_MH
+    row[New_Deltamass_output_column_name] = final_New_DM
+    row[Static_modifications_position_output_column_name] = final_mods_position
+    row[Matchnumber_output_column_name]= match_number
+    row[Possible_option_output_column_name]= addition
+    
+    return row
+    
+
+
+
 ##################
 # Main functions #
 ##################
@@ -504,6 +552,8 @@ def main(file,file1,infile1, infilefasta):
             NT_label = value
         
         else:        
+            if value == NT_label:
+                selectedaa = option.upper() # The aa that has a fix label (ej ; K-TMT) is saved
         
             value2 = value+dic_aa[option]
             dic_mod[option[0]] = new_name,value2,value
@@ -537,7 +587,7 @@ def main(file,file1,infile1, infilefasta):
     Matchnumber_output_column_name = config["TrunkSolver_Parameters"].get("Matchnumber_output_column_name") # Column name of the output where the  number of possible options is annotated
     Possible_option_output_column_name = config["TrunkSolver_Parameters"].get("Possible_option_output_column_name") # Column name of the output where all possible options are annotated
     output_file_suffix = config["TrunkSolver_Parameters"].get("output_file_suffix") # Chosen suffix for output file 
-    
+
 
 
     # All labels that want to be checked are save in dic_CombList dictionary
@@ -553,7 +603,7 @@ def main(file,file1,infile1, infilefasta):
     
     # Output columns are overwritten
     try: 
-        df.drop([TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_ppm_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_outputcolumn_name,Matchnumber_output_column_name,Possible_option__outputcolumn_name], axis=1)
+        df.drop([TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_ppm_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name,Possible_option_output_column_name], axis=1)
     except:
         pass
     
@@ -571,46 +621,8 @@ def main(file,file1,infile1, infilefasta):
     logging.info("Processing input file")
     
     
-    cont=0
-    for index, row in df.iterrows():
-    
-        
-        
-        if row[Seq_column_name].find("_") != -1: # If another program has already corrected it, TrunkSolver does not annote anything new
-            final_TrunkSequence = row[Seq_column_name]
-            final_TrunkDM = row[Delta_MH_cal_column_name]
-            final_TrunkLabel = " "
-            final_mods_position = row[fix_mod_column_name]
-            final_Trunk_Label_ppm = " "
-            match_number = 0
-            final_New_Theo_MH = row[Theo_mh_column_name]
-            final_New_DM = row[Delta_MH_cal_column_name]
-            addition = ""
-                
-
-        else:
-            dic_seqs,result=Obtain_values(row[Seq_column_name],row[MasterProtein_column_name],dic_fasta)
-            final_TrunkSequence,final_TrunkDM,final_TrunkLabel,final_mods_position,minimun,final_Trunk_Label_ppm,match_number,addition,final_New_DM,final_New_Theo_MH = TrunkSolver(row[Seq_column_name],dic_seqs,row[Exp_mh_column_name],row[Delta_MH_cal_column_name],result,Error,dic_aa,dic_CombList,dic_mod,NT_label,decnum,Mproton,Hydrogen,O2,row[Theo_mh_column_name],x)
-
-        
-        
-        if final_mods_position == " " or final_mods_position == "" :
-            final_mods_position = row[fix_mod_column_name]
-            
-        df.loc[cont,TrunkSequence_output_column_name] = final_TrunkSequence
-        df.loc[cont,TrunkDM_output_column_name] = final_TrunkDM
-        df.loc[cont,TrunkLabel_output_column_name] = final_TrunkLabel
-        df.loc[cont,TrunkLabel_ppm_output_column_name] = final_Trunk_Label_ppm
-        df.loc[cont,New_Theo_mh_output_column_name]= final_New_Theo_MH
-        df.loc[cont,New_Deltamass_output_column_name] = final_New_DM
-        df.loc[cont,Static_modifications_position_output_column_name] = final_mods_position
-        df.loc[cont,Matchnumber_output_column_name]= match_number
-        df.loc[cont,Possible_option_output_column_name]= addition
-
-        cont=cont+1
-    
-
-    
+    df = df.apply(lambda y: applyTSSolver(y,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh_column_name,Delta_MH_cal_column_name,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh_column_name,x,TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name,Possible_option_output_column_name,fix_mod_column_name), axis = 1)
+       
     # write outputfile
     logging.info("Writing output file")
 
@@ -624,13 +636,7 @@ def main(file,file1,infile1, infilefasta):
 
 
 
-
-
 if __name__ == '__main__':
-    try:
-        remove('Solver.ini')
-    except:
-        None
 
 
     # parse arguments
@@ -662,12 +668,12 @@ if __name__ == '__main__':
         config.set('TrunkSolver_Parameters', 'Absolute_Error', str(args.abserror))
         config.set('Logging', 'create_ini', '1')
     if args.relerror is not None:
-        config.set('TrunkSolver_Parameters', 'Relative_Error', str(args.relerror))
+        config.set('TrunkSolver_Parameters', 'relative_error', str(args.relerror))
         config.set('Logging', 'create_ini', '1')
    
     # if something is changed, write a copy of ini
     if config.getint('Logging', 'create_ini') == 1:
-        with open(os.path.dirname(args.infile) + '/Solver.ini', 'w') as newconfig:
+        with open(os.path.dirname(args.infile) + '/config/Solver.ini', 'w') as newconfig:
             config.write(newconfig)
         
     # logging debug level. By default, info level
@@ -693,15 +699,7 @@ if __name__ == '__main__':
     logging.info('start script: '+"{0}".format(" ".join([x for x in sys.argv])))
     
 
-    # configuration files are read      
-    try:
-        open('Solver.ini',"r")
-        trunkini='Solver.ini'
-        logging.info("Modified TrunkSolver configuration file is going to be use")
-        
-    except:
-        open("config/Solver.ini","r")
-        trunkini="config/Solver.ini"
 
-    main("config/MassMod.ini",trunkini, infile1,infilefasta)
+    main("config/MassMod.ini",args.config, infile1,infilefasta)
   
+

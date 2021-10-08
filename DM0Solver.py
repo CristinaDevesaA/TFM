@@ -22,9 +22,6 @@ import os
 import logging
 from pathlib import Path
 
-
-
-
 ###################
 # Local functions #
 ###################
@@ -37,7 +34,7 @@ def readInfile(infile):
     df = pd.read_csv(infile, sep="\t", float_precision='high',low_memory=False)
     return df
 
-def DM0Solver( Theo_mh,Exp_mh,seq,Error,dic_DM0,SequenceMassmod,sequence):
+def DM0Solver(Theo_mh,Exp_mh,seq,Error,dic_DM0,SequenceMassmod,sequence):
     
     """
     DM0Solver function returns the sequence and label, that match with the smallest error
@@ -82,8 +79,26 @@ def DM0Solver( Theo_mh,Exp_mh,seq,Error,dic_DM0,SequenceMassmod,sequence):
    
     return DM0Sequence,DM0Label,DM0Label_ppm
 
+def applySolver(row, Seq_column_name, Theo_mh_column_name, Exp_mh_column_name, Error, dic_DM0,
+                DM0Sequence_output_column_name, DM0Label_output_column_name, DM0Label_ppm_output_column_name):
+    seq = row[Seq_column_name]
+    SequenceMassmod = seq[seq.find("[")+1:]
+    SequenceMassmod = SequenceMassmod[:SequenceMassmod.find("]")]  # Mass modification of the sequence is obtained.
+    if row[Seq_column_name].find("_") != -1:  # If  scan has already been corrected DM0Seqeuence remains Seq_column_name
+  	    seq = seq[:seq.find("_")]
+        
+    else:
 
+        seq = seq[:seq.find("[")]+seq[seq.find("]")+1:]  # Clean sequence is obtained.# if  scan has not yet been corrected DM0Sover function is executed
 
+    DM0Sequence,DM0Label,DM0Label_ppm = DM0Solver(row[Theo_mh_column_name],row[Exp_mh_column_name],seq,Error,dic_DM0,SequenceMassmod,row[Seq_column_name])
+   
+        
+    # New columns are completed  
+    row[DM0Sequence_output_column_name] = DM0Sequence
+    row[DM0Label_output_column_name] = DM0Label.upper()
+    row[DM0Label_ppm_output_column_name] = DM0Label_ppm
+    return row
 
 ##################
 # Main functions #
@@ -93,13 +108,15 @@ def main(solverconfig,infile):
     
     """
     Reading configuration file and processing file
+
     """
+
     config = configparser.ConfigParser(inline_comment_prefixes='#')
     config.read(solverconfig) # Reading configuration file
     
     logging.info("Reading DM0Solver configuration file")
     
-    Error = config["DM0Solver_Parameters"].getfloat("Relative_Error_ppm") # Relative error (ppm)
+
     Exp_mh_column_name = config["DM0Solver_Parameters"].get("exp_mh_column_name") # Experimental mh  column name
     Theo_mh_column_name = config["DM0Solver_Parameters"].get("theo_mh_column_name")# Theoretical mh column name 
     Seq_column_name = config["DM0Solver_Parameters"].get("Sequence_column_name") # Sequence column name
@@ -108,6 +125,7 @@ def main(solverconfig,infile):
     DM0Label_output_column_name =  config["DM0Solver_Parameters"].get("DM0Label_output_column_name") # Column name of the output where the chosen label is annotated
     DM0Label_ppm_output_column_name =  config["DM0Solver_Parameters"].get("DM0Label_ppm_output_column_name") # Column name of the output where the calculated error in ppm is annotated
     output_file_suffix = config["DM0Solver_Parameters"].get("output_file_suffix") # Chosen suffix for output file 
+    Error = config["DM0Solver_Parameters"].getfloat("Relative_Error_ppm") # Relative error (ppm)
 
 
  
@@ -129,28 +147,10 @@ def main(solverconfig,infile):
     df[DM0Label_ppm_output_column_name] = np.nan
 
 
-    cont = 0
+    #cont = 0
     logging.info("Processing input file")
-
-    for index, row in df.iterrows():
-        seq = row[Seq_column_name]
-        SequenceMassmod = seq[seq.find("[")+1:]
-        SequenceMassmod = SequenceMassmod[:SequenceMassmod.find("]")]  # Mass modification of the sequence is obtained.
-        if row[Seq_column_name].find("_") != -1:  # If  scan has already been corrected DM0Seqeuence remains Seq_column_name
-      	    seq = seq[:seq.find("_")]
-            
-        else:
-    
-            seq = seq[:seq.find("[")]+seq[seq.find("]")+1:]  # Clean sequence is obtained.# if  scan has not yet been corrected DM0Sover function is executed
-
-        DM0Sequence,DM0Label,DM0Label_ppm = DM0Solver(row[Theo_mh_column_name],row[Exp_mh_column_name],seq,Error,dic_DM0,SequenceMassmod,row[Seq_column_name])
-   
-            
-        # New columns are completed  
-        df.loc[cont,DM0Sequence_output_column_name] = DM0Sequence
-        df.loc[cont,DM0Label_output_column_name] = DM0Label.upper()
-        df.loc[cont,DM0Label_ppm_output_column_name] = DM0Label_ppm
-        cont=cont+1
+    df = df.apply(lambda x: applySolver(x, Seq_column_name, Theo_mh_column_name, Exp_mh_column_name, Error, dic_DM0,
+                                        DM0Sequence_output_column_name, DM0Label_output_column_name, DM0Label_ppm_output_column_name), axis = 1)
 
     # write outputfile
     logging.info("Writing output file")
@@ -169,10 +169,7 @@ def main(solverconfig,infile):
 
 if __name__ == '__main__':
     
-    try:
-        remove('Solver.ini')
-    except:
-        None
+
 
     # parse arguments
     parser = argparse.ArgumentParser(
@@ -196,12 +193,12 @@ if __name__ == '__main__':
     config = configparser.ConfigParser(inline_comment_prefixes='#')
     config.read(args.config)
     if args.relativeerror is not None:
-        config.set('DM0Solver_Parameters', 'Relative_Error', str(args.relativeerror))
+        config.set('DM0Solver_Parameters', 'relative_error_ppm', str(args.relativeerror))
         config.set('Logging', 'create_ini', '1')
    
     # if something is changed, write a copy of ini
     if config.getint('Logging', 'create_ini') == 1:
-        with open(os.path.dirname(args.infile) + '/Solver.ini', 'w') as newconfig:
+        with open(os.path.dirname(args.infile) + '/config/Solver.ini', 'w') as newconfig:
             config.write(newconfig)
         
     # logging debug level. By default, info level
@@ -225,14 +222,5 @@ if __name__ == '__main__':
     #start main function
     logging.info('start script: '+"{0}".format(" ".join([x for x in sys.argv])))
     
-    # Configuration files are read   
-    try:
-        open('Solver.ini',"r")
-        solverini ='Solver.ini'
-        logging.info("Modified Solver configuration file is going to be use")
 
-
-    except:
-        open("config/Solver.ini","r")
-        solverini = "config/Solver.ini"
-    main(solverini, infile1)
+    main(args.config, infile1)

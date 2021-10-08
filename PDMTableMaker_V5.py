@@ -16,7 +16,6 @@ __status__ = "Development"
 import re
 import pandas as pd
 from Bio import SeqIO
-from os import remove
 import math
 import numpy as np
 from optparse import OptionParser
@@ -250,6 +249,7 @@ def main(file,infile1,fastafile):
     MasterProtein_column_name =  config["PDMTableMaker_Parameters"].get("MasterProtein_column_name") # Master protien name column name 
     Outfile_suffix =  config["PDMTableMaker_Parameters"].get("Outfile_suffix") # Chosen suffix for output file
     nconditions =  config["PDMTableMaker_Conditions"].getint("number_of_conditions") # Number of conditions
+
 
     logging.info("Processing input file")
     
@@ -724,15 +724,7 @@ if __name__ == '__main__':
     #start main function
     logging.info('start script: '+"{0}".format(" ".join([x for x in sys.argv])))
     
-    # configuration files are read      
-    try:
-        open('Solver.ini',"r")
-        SiteSolverini='Solver.ini'
-        logging.info("Modified SiteSolverini configuration file is going to be use")
+
         
-    except:
-        open("config/Solver.ini","r")
-        SiteSolverini="config/Solver.ini"
-        
-    main(SiteSolverini, args.infile, args.fastafile)
+    main(args.config, args.infile, args.fastafile)
 
