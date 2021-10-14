@@ -110,5 +110,5 @@ if __name__ == '__main__':
     logging.info('start script: '+"{0}".format(" ".join([x for x in sys.argv])))
     
 
-    main(args.config, args.infile)
+    main(args.infile,args.config)
 
