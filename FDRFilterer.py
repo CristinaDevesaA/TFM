@@ -133,7 +133,7 @@ if __name__ == '__main__':
     logging.info('start script: '+"{0}".format(" ".join([x for x in sys.argv])))
 
 
-    main("config/FDRFilterer.ini",infile)
+    main(args.config,args.infile)
   
 
 
