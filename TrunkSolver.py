@@ -20,17 +20,15 @@ import math
 import time
 from pathlib import Path
 from optparse import OptionParser
-import requests
 import configparser
 from Bio import SeqIO
 import numpy as np 
 import pandas as pd 
-from pandas import ExcelWriter
 import argparse
 import os
 import logging
 from pathlib import Path
-import tkinter as tk
+
 
 
 
