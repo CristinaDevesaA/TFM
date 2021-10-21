@@ -24,11 +24,12 @@ import configparser
 from Bio import SeqIO
 import numpy as np 
 import pandas as pd 
+from pandas import ExcelWriter
 import argparse
 import os
 import logging
 from pathlib import Path
-
+import tkinter as tk
 
 
 
@@ -647,10 +648,12 @@ if __name__ == '__main__':
       
     # default TrunkSolver configuration file
     defaultconfig = os.path.join(os.path.dirname(__file__), "config/Solver.ini")
+    defaultconfigM = os.path.join(os.path.dirname(__file__), "config/MassMod.ini")
     
     parser.add_argument('-i', '--infile', required=True, help='Path to input file')
     parser.add_argument('-f', '--fastafile', required=True, help='Path to input fastafile')
     parser.add_argument('-c', '--config', default=defaultconfig, help='Path to custom config.ini file')
+    parser.add_argument('-Mm', '--Massconfig', default=defaultconfigM, help='Path to custom config.ini file')
     
     # these will overwrite the config if specified
     parser.add_argument('-r', '--relerror', help='Maximum allowable relative error (ppm)')
@@ -698,6 +701,6 @@ if __name__ == '__main__':
     
 
 
-    main("config/MassMod.ini",args.config, infile1,infilefasta)
+    main(args.Massconfig,args.config, infile1,infilefasta)
   
 
