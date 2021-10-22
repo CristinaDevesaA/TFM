@@ -42,13 +42,24 @@ def readInfile(infile,cal_Dm_mh_colum_name):
     df[cal_Dm_mh_colum_name].astype("float64").dtypes
     return df
 
+def get_fasta_report(file):
+    '''
+    Create the FASTA report
+    '''
+    def _create_key_id(rec):
+        if (rec.startswith("sp") or rec.startswith("tr")) and "|" in rec:
+            return rec.split("|")[1]
+        else:
+            return rec
+    indb = SeqIO.index(file, "fasta", key_function=_create_key_id)
+    return indb
+
+
 
 
 def Obtain_n (MasterProtein, dicc_fasta,clean_seq,m,npos) : 
 
-    MasterProtein = MasterProtein.replace(" ","_") 
-    MasterProtein=MasterProtein.strip("\n").split("_")
-    MasterProtein= MasterProtein[0]+"_"+MasterProtein[1] # The id is extracted from the Master Protein name 
+    MasterProtein = MasterProtein.strip(" ")
     
     final_q_pos = ""
     #The fasta sequence corresponding to this identifier is saved 
@@ -58,19 +69,7 @@ def Obtain_n (MasterProtein, dicc_fasta,clean_seq,m,npos) :
             break
     
     
-    
-    
-    
-    #MasterProtein=MasterProtein.strip("\n").split("_")
-    #MasterProtein= MasterProtein[0]+"_"+MasterProtein[1] # The id is extracted from the Master Protein name 
-    #final_q_pos = ""
 
-
-    # The fasta sequence corresponding to this identifier is saved 
-    #for iden in dicc_fasta:
-        #if MasterProtein==iden:
-            #result=str(dicc_fasta[iden].seq.upper()).replace("X","L")
-            #break
     
     pattern=re.compile(clean_seq.replace("L","l").replace("I","[IL]").replace("l","[IL]")) # Problems that may exist with leucine and isoleucine are solved
     
@@ -253,7 +252,7 @@ def main(file,infile1,fastafile):
 
     logging.info("Processing input file")
     
-    dicc_fasta = SeqIO.index(fastafile, "fasta")
+    dicc_fasta = get_fasta_report(fastafile)
     nfile = 0
     for file in open(infile1,"r"): 
         
@@ -305,7 +304,8 @@ def main(file,infile1,fastafile):
                 p,seq,aa,ScanFreq,m,l,pd,n,dqna,b,e,first_b,first_n,b_e= ListMaker(df,row[seq_column_name],counts,dicc_fasta,row[MasterProtein_column_name])              
                 d = float(row[DM_column_name])
                 pdm = row[seq_column_name]
-                qId = row[MasterProtein_column_name].split("|")[1]
+                qId = row[MasterProtein_column_name]
+
                 df2.loc[cont,"p"] = p
                 df2.loc[cont,"q"] = qId
                 df2.loc[cont,"pdm"] = pdm
