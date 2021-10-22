@@ -45,6 +45,17 @@ def readInfile(infile):
     df = pd.read_csv(infile, sep="\t", float_precision='high', low_memory=False)
     return df
 
+def get_fasta_report(file):
+    '''
+    Create the FASTA report
+    '''
+    def _create_key_id(rec):
+        if (rec.startswith("sp") or rec.startswith("tr")) and "|" in rec:
+            return rec.split("|")[1]
+        else:
+            return rec
+    indb = SeqIO.index(file, "fasta", key_function=_create_key_id)
+    return indb
 
 
 
@@ -171,9 +182,8 @@ def Obtain_values(seq,MasterProtein_column,dic_fasta):
     
     clean_seq = seq[:seq.find("[")]+seq[seq.find("]")+1:].upper() #The clean sequence is obtained.
 
-    MasterProtein = MasterProtein_column.replace(" ","_")
-    MasterProtein = MasterProtein.strip("\n").split("_")
-    MasterProtein = MasterProtein[0]+"_"+MasterProtein[1] # The id is extracted from the Master Protein name 
+    MasterProtein = MasterProtein_column.strip(" ")
+
 
 
 
@@ -597,7 +607,7 @@ def main(file,file1,infile1, infilefasta):
     
     
 
-    dic_fasta = SeqIO.index(infilefasta, "fasta")
+    dic_fasta = get_fasta_report(infilefasta)
     df = readInfile(infile1)
     
     # Output columns are overwritten
