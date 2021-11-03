@@ -56,7 +56,7 @@ def main(infile,file):
 
     df1_without_duplicates = df1.drop_duplicates(subset=['qdna']) # qdna duplicates are deleted
 
-    df1_correct_order = df1_without_duplicates.reindex(columns=['q','qdna','qFreq','d','a','n','b','e','first_b','first_n','k','qna','qk','qdnaFreq','qnaFreq','qkFreq','A','N','qdNA','qNA',"Comet_ptm"])# new colum order is configured
+    df1_correct_order = df1_without_duplicates.reindex(columns=['q','qdna','qFreq','d','a','n','b','e','first_b','first_n','k','qna','qk','qdnaFreq','qnaFreq','qkFreq','A','N','qdNA','qNA'])# new colum order is configured
     
     logging.info("Writing output file")
     df1_correct_order.to_csv(output_name+".txt", index=False, sep='\t', encoding='utf-8')
