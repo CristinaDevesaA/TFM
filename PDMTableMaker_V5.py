@@ -64,7 +64,7 @@ def Obtain_n (MasterProtein, dicc_fasta,clean_seq,m,npos) :
     final_q_pos = ""
     #The fasta sequence corresponding to this identifier is saved 
     for iden in dicc_fasta:
-        if MasterProtein in iden:
+        if MasterProtein == iden:
             result=str(dicc_fasta[iden].seq.upper()).replace("X","L")
             break
     
