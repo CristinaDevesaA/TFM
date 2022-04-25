@@ -487,7 +487,7 @@ def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_
 
 
 
-def applyTSSolver(row,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh_column_name,Delta_MH_cal_column_name,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh_column_name,x,TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name,Possible_option_output_column_name,fix_mod_column_name,TrunkCleanPeptide_output_column_name):
+def applyTSSolver(row,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh_column_name,Delta_MH_cal_column_name,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh_column_name,x,TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name,Possible_option_output_column_name,fix_mod_column_name,TrunkCleanPeptide_output_column_name,Missing_cleavages_output_column_name,Truncation_output_column_name):
     
     
         
@@ -512,21 +512,36 @@ def applyTSSolver(row,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh
         else: 
             final_TrunkCleanPeptide_output_column_name = final_TrunkSequence[:final_TrunkSequence.find("[")]+final_TrunkSequence[final_TrunkSequence.find("]")+1:]
 
-        
-        
+    number = final_TrunkCleanPeptide_output_column_name.count("K") + final_TrunkCleanPeptide_output_column_name.count("R")
+
+    if final_TrunkCleanPeptide_output_column_name[-1]=="K" or final_TrunkCleanPeptide_output_column_name[-1]=="R": 
+        number = number-1
+    if final_TrunkCleanPeptide_output_column_name.find("KP")!=-1: 
+       number =number-1
+    if final_TrunkCleanPeptide_output_column_name.find("RP")!=-1: 
+        number =number-1    
+    if number <0 : 
+        number = 0 
+    missingcleavage = number   
     if final_mods_position == " " or final_mods_position == "" :
         final_mods_position = row[fix_mod_column_name]
+    if final_TrunkLabel.find("Trunc")!=-1:
+        Truncated = 1
+    else:
+        Truncated = 0 
             
     row[TrunkSequence_output_column_name] = final_TrunkSequence
     row[TrunkDM_output_column_name] = final_TrunkDM
     row[TrunkLabel_output_column_name] = final_TrunkLabel
     row[TrunkCleanPeptide_output_column_name] =  final_TrunkCleanPeptide_output_column_name
+    row[Missing_cleavages_output_column_name] =  missingcleavage
     row[TrunkLabel_ppm_output_column_name] = final_Trunk_Label_ppm
     row[New_Theo_mh_output_column_name]= final_New_Theo_MH
     row[New_Deltamass_output_column_name] = final_New_DM
     row[Static_modifications_position_output_column_name] = final_mods_position
     row[Matchnumber_output_column_name]= match_number
     row[Possible_option_output_column_name]= addition
+    row[Truncation_output_column_name]=Truncated
 
     
     return row
@@ -597,6 +612,8 @@ def main(file,file1,infile1, infilefasta):
     
     TrunkSequence_output_column_name =  config["TrunkSolver_Parameters"].get("TrunkSequence_output_column_name") # Column name of the output where the chosen sequence is annotated
     TrunkCleanPeptide_output_column_name =  config["TrunkSolver_Parameters"].get("TrunkPlainPeptide_output_column_name") # Column name of the output where the chosen sequence is annotated
+    Missing_cleavages_output_column_name =  config["TrunkSolver_Parameters"].get("Missing_cleavages_output_column_name") # Column name of the output where missing cleavages will be annotated
+    Truncation_output_column_name =  config["TrunkSolver_Parameters"].get("Truncation_output_column_name") # Column name of the output where truncation are annotated
     TrunkDM_output_column_name =  config["TrunkSolver_Parameters"].get("TrunkDM_output_column_name") # Column name of the output where the recalculated DM is annotated, taking in to account the label 
     TrunkLabel_output_column_name =  config["TrunkSolver_Parameters"].get("TrunkLabel_output_column_name") # Column name of the output where the chosen label is annotated
     TrunkLabel_ppm_output_column_name =  config["TrunkSolver_Parameters"].get("TrunkLabel_ppm_output_column_name") # Column name of the output where the calculated error in ppm is annotated
@@ -629,17 +646,20 @@ def main(file,file1,infile1, infilefasta):
     df[TrunkLabel_output_column_name]=""
     df[TrunkLabel_ppm_output_column_name]=np.nan
     df[TrunkCleanPeptide_output_column_name] = ""
+    df[TrunkCleanPeptide_output_column_name] = ""
+    df[Missing_cleavages_output_column_name]=""
     df[New_Theo_mh_output_column_name]=np.nan
     df[New_Deltamass_output_column_name]=np.nan  
     df[Static_modifications_position_output_column_name]=""
     df[Matchnumber_output_column_name]=""
-    df[Possible_option_output_column_name]=""
+    df[Truncation_output_column_name]=""
+
     
     
     logging.info("Processing input file")
     
     
-    df = df.apply(lambda y: applyTSSolver(y,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh_column_name,Delta_MH_cal_column_name,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh_column_name,x,TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name,Possible_option_output_column_name,fix_mod_column_name,TrunkCleanPeptide_output_column_name), axis = 1)
+    df = df.apply(lambda y: applyTSSolver(y,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh_column_name,Delta_MH_cal_column_name,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh_column_name,x,TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name,Possible_option_output_column_name,fix_mod_column_name,TrunkCleanPeptide_output_column_name,Missing_cleavages_output_column_name,Truncation_output_column_name), axis = 1)
        
     # write outputfile
     logging.info("Writing output file")
