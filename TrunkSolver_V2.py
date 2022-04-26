@@ -145,15 +145,17 @@ def tag(seq,subseq):
     elif number2-number <= len(seq):
         rigth = loss
           
-    
+
     # If the cut is tryptic or not is determined at both sides
     if left != "":
+
         if left[-1] == "K" or left[-1] == "R" and seq[0] != "P":   
             Truncation.append("YeS")
         else:
              Truncation.append("No") 
             
     if rigth != "":
+
         if seq[-1] == "K" or seq[-1] == "R" and rigth[0] != "P":
              Truncation.append("YeS")
         else:
@@ -418,6 +420,7 @@ def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_
                             dic_result[minimun_DiffPPM] = TrunkDM,TrunkSequence,TrunkLabel,mods_position,Trunk_Label_ppm,cut,New_DM, New_Theo_MH
 
 
+    
     # if there is more than one possibility those that have a trytic digestion will have preference
     match = "NO"
     if dic_result :
@@ -438,7 +441,10 @@ def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_
                 match = "YES"
                 final_TrunkDM = dic_result[key][0]
                 final_TrunkSequence = dic_result[key][1]
-                final_TrunkLabel = "Truncation;"+dic_result[key][2]
+                if dic_result[key][5] == "No":
+                    final_TrunkLabel = "Truncation;"+dic_result[key][2]
+                if dic_result[key][5] == " ":
+                    final_TrunkLabel = dic_result[key][2]
                 final_mods_position = dic_result[key][3]
                 final_Trunk_Label_ppm = dic_result[key][4]
                 final_New_DM = dic_result[key][6]
