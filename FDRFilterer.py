@@ -46,7 +46,7 @@ def filterapply (infile,GlobalThres, LocalThres, PeakThres, GlobalFDR_colum_name
             elif cont >= 1:
                 fields = line1.strip("\n").split("\t")
   
-                if float(fields[header.index(GlobalFDR_colum_name)]) < GlobalThres and (float(fields[header.index(LocalFDR_colum_name)]) < LocalThres or float(fields[header.index(PeakFDR_colum_name)]) < PeakThres) and str(fields[header.index(Label_colum_name)]).upper() != Decoys_naming:        
+                if float(fields[header.index(GlobalFDR_colum_name)]) < GlobalThres and (float(fields[header.index(LocalFDR_colum_name)]) < LocalThres or float(fields[header.index(PeakFDR_colum_name)]) < PeakThres) and str(fields[header.index(Label_colum_name)]).upper() != Decoys_naming.upper():        
                     newfile.write(line1)
             cont = cont+1
              
