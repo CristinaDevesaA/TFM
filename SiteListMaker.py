@@ -158,19 +158,18 @@ def tablesMaker(dic,dic_NM,x):
     columns_names_ordered.remove("DMFreq")
     final_order = ["DM","DMFreq"]+columns_names_ordered
     final_order.append("Unassigned")
+
     df_final_corr_p0_trans_reindex = df_final_corr_p0_trans.reindex(columns = final_order)# new colum order is configured
     df_final_corr_p0_trans_reindex = df_final_corr_p0_trans_reindex.replace(np.nan, 0)
     df_final_corr.columns =position_list+["DMFreq","DM","aa"]
     df_final_corr_reindex = df_final_corr.reindex(columns =["DM","DMFreq","aa"]+position_list)# new colum order is configured
     df_final.columns =position_list+["DMFreq","DM","aa"]
     df_final_reindex = df_final.reindex(columns =["DM","DMFreq","aa"]+position_list)# new colum order is configured
+
     c = df_final_corr_p0_trans_reindex.shape[0]
     for DM in dic_NM:   
         c = c+1
         df_final_corr_p0_trans_reindex.loc[c]=[DM, dic_NM[DM]]+ ([0]*(len(df_final_corr_p0_trans_reindex.columns.values)-3))+[dic_NM[DM]]
-
-    df_final_corr_p0_trans_reindex = df_final_corr_p0_trans_reindex._get_numeric_data()
-    df_final_corr_p0_trans_reindex[df_final_corr_p0_trans_reindex < 0] = 0    
 
     return df_final_corr_reindex,df_final_reindex,df_final_corr_p0_trans_reindex
 
