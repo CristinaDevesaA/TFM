@@ -248,12 +248,13 @@ def best_combination(subseq,Exp_Mh,cont,j,Error,label_mass,dic_mod,selectedaa,di
     variables that indicate  whether TrunkSolver should stop extending the length of the sequence being analyzed
     """
     # New subsequence mass is calulated by theoretical_mh_by_hand function
+
     ther,newsequence,mods_position = theoretical_mh_by_hand(subseq,label_mass,dic_mod,dic_aa,selectedaa,Mproton,Hydrogen,O2,decnum) 
-    
+  
     # initial parameters are set 
     ngreater = 0
-    minimun_DiffMasa = 2*10**10
-    minimun_DiffPPM = 2*10**10
+    minimun_DiffMasa = 2*10**100
+    minimun_DiffPPM = 2*10**100
     TrunkSequence = ""
     TrunkDM = ""
     TrunkLabel = ""
@@ -266,17 +267,20 @@ def best_combination(subseq,Exp_Mh,cont,j,Error,label_mass,dic_mod,selectedaa,di
     DiffMasa2 = Exp_Mh-ther # Mass difference between experimental an theoretical mass 
    
     # All posible options of "Combination List" are examined
-    number_option = 0   
+    number_option = 0  
+
     for iden in dic_CombList: 
         number_option = number_option+1     
         mass = dic_CombList[iden]      
         total_value2 = ther+mass
+
         total_value2 = float(format (total_value2,decnum))
+
         DiffMasa = (total_value2-Exp_Mh) #Mass difference between experimental and theoretical plus one option of "Combination List"     
-       
+
         # Mass difference is calculated in ppms  
         DiffPPM = abs(((total_value2-Exp_Mh)*1000000)/total_value2)
-  
+
         # The lowest DiffPPM value is saved 
         if DiffPPM < minimun_DiffPPM:
             minimun_DiffMasa = DiffMasa2
@@ -403,7 +407,7 @@ def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_
                     
                     
                     minimun_DiffPPM,TrunkSequence,TrunkDM,TrunkLabel,mods_position,Trunk_Label_ppm,j,New_DM, New_Theo_MH = best_combination(subseq,Exp_mh,int(cont),j,Error,float(NT_label),dic_mod,selectedaa,dic_CombList,dic_aa,decnum,Mproton,Hydrogen,O2,distanceDMsub,DMresultposition,x)
-                    
+
                     if TrunkSequence != "" and j == "": # if best_combination  function finds a possible solution 
                        
                         # If the PPM difference is lower than the minimun the option will be saved in dic_result dictionary 
@@ -420,36 +424,30 @@ def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_
                             dic_result[minimun_DiffPPM] = TrunkDM,TrunkSequence,TrunkLabel,mods_position,Trunk_Label_ppm,cut,New_DM, New_Theo_MH
 
 
-    
+
     # if there is more than one possibility those that have a trytic digestion will have preference
-    match = "NO"
+
     if dic_result :
         for key in dic_result:
-            if str(dic_result.values()).find("YeS") != -1:
-                if dic_result[key][5] == "YeS" and  dic_result[key][4]<final_Trunk_Label_ppm: 
-                    match = "YES"
-                    minimun = abs(key)
-                    final_TrunkDM = dic_result[key][0]
-                    final_TrunkSequence = dic_result[key][1]
-                    final_TrunkLabel = "TrypticCut;"+dic_result[key][2]
-                    final_mods_position = dic_result[key][3]
-                    final_Trunk_Label_ppm = dic_result[key][4]
-                    final_New_DM = dic_result[key][6]
-                    final_New_Theo_MH = dic_result[key][7]
-            elif (dic_result[key][5] == "No" or dic_result[key][5] == " " )and dic_result[key][4]<final_Trunk_Label_ppm:                
+      
+            if dic_result[key][4]<final_Trunk_Label_ppm: 
+
+                    
                 minimun = abs(key)
-                match = "YES"
                 final_TrunkDM = dic_result[key][0]
                 final_TrunkSequence = dic_result[key][1]
                 if dic_result[key][5] == "No":
                     final_TrunkLabel = "Truncation;"+dic_result[key][2]
                 if dic_result[key][5] == " ":
                     final_TrunkLabel = dic_result[key][2]
+                if dic_result[key][5].upper() == "YES":
+
+                    final_TrunkLabel = "TrypticCut;"+dic_result[key][2]
                 final_mods_position = dic_result[key][3]
                 final_Trunk_Label_ppm = dic_result[key][4]
                 final_New_DM = dic_result[key][6]
-                final_New_Theo_MH =dic_result[key][7]
-          
+                final_New_Theo_MH = dic_result[key][7]
+
 
                     
                     
@@ -464,18 +462,6 @@ def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_
         final_New_DM = calibrated_delta_MH
  
         
-    # if there are more than one possibility a variable, all of them will be saved 
-    if match == "YES":
-        c = 0
-        for key in dic_result:
-            if dic_result[key][0] != final_TrunkDM and dic_result[key][4]<= final_Trunk_Label_ppm and dic_result[key][4]<= Error:
-                c = c+1
-                if c == 1:
-                    addition = addition+dic_result[key][1]+","+str(dic_result[key][4])
-                else:
-                    addition = addition+"   ;   "+dic_result[key][1]+","+str(dic_result[key][4])
-                match_number = c
-        
     if final_Trunk_Label_ppm > Error:
         final_TrunkDM = calibrated_delta_MH
         final_TrunkSequence = seq
@@ -485,7 +471,7 @@ def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_
         final_New_DM = calibrated_delta_MH
         
        
-    return final_TrunkSequence,final_TrunkDM,final_TrunkLabel,final_mods_position,minimun,final_Trunk_Label_ppm,match_number,addition,final_New_DM,final_New_Theo_MH
+    return final_TrunkSequence,final_TrunkDM,final_TrunkLabel,final_mods_position,minimun,final_Trunk_Label_ppm,addition,final_New_DM,final_New_Theo_MH
 
 
 
@@ -493,9 +479,9 @@ def TrunkSolver(seq,dic_seqs,Exp_mh,calibrated_delta_MH,result,Error,dic_aa,dic_
 
 
 
-def applyTSSolver(row,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh_column_name,Delta_MH_cal_column_name,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh_column_name,x,TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name,Possible_option_output_column_name,fix_mod_column_name,TrunkCleanPeptide_output_column_name,Missing_cleavages_output_column_name,Truncation_output_column_name):
+def applyTSSolver(row,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh_column_name,Delta_MH_cal_column_name,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh_column_name,x,TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,fix_mod_column_name,TrunkCleanPeptide_output_column_name,Missing_cleavages_output_column_name,Truncation_output_column_name):
     
-    
+
         
     if row[Seq_column_name].find("_") != -1: # If another program has already corrected it, TrunkSolver does not annote anything new
         final_TrunkSequence = row[Seq_column_name]
@@ -511,8 +497,9 @@ def applyTSSolver(row,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh
                 
 
     else:
+
         dic_seqs,result=Obtain_values(row[Seq_column_name],row[MasterProtein_column_name],dic_fasta)
-        final_TrunkSequence,final_TrunkDM,final_TrunkLabel,final_mods_position,minimun,final_Trunk_Label_ppm,match_number,addition,final_New_DM,final_New_Theo_MH = TrunkSolver(row[Seq_column_name],dic_seqs,row[Exp_mh_column_name],row[Delta_MH_cal_column_name],result,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,row[Theo_mh_column_name],x)
+        final_TrunkSequence,final_TrunkDM,final_TrunkLabel,final_mods_position,minimun,final_Trunk_Label_ppm,addition,final_New_DM,final_New_Theo_MH = TrunkSolver(row[Seq_column_name],dic_seqs,row[Exp_mh_column_name],row[Delta_MH_cal_column_name],result,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,row[Theo_mh_column_name],x)
         if final_TrunkSequence.find("_")!=-1: 
             final_TrunkCleanPeptide_output_column_name = final_TrunkSequence[:final_TrunkSequence.find("_")]
         else: 
@@ -545,8 +532,6 @@ def applyTSSolver(row,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh
     row[New_Theo_mh_output_column_name]= final_New_Theo_MH
     row[New_Deltamass_output_column_name] = final_New_DM
     row[Static_modifications_position_output_column_name] = final_mods_position
-    row[Matchnumber_output_column_name]= match_number
-    row[Possible_option_output_column_name]= addition
     row[Truncation_output_column_name]=Truncated
 
     
@@ -624,8 +609,6 @@ def main(file,file1,infile1, infilefasta):
     TrunkLabel_output_column_name =  config["TrunkSolver_Parameters"].get("TrunkLabel_output_column_name") # Column name of the output where the chosen label is annotated
     TrunkLabel_ppm_output_column_name =  config["TrunkSolver_Parameters"].get("TrunkLabel_ppm_output_column_name") # Column name of the output where the calculated error in ppm is annotated
     Static_modifications_position_output_column_name = config["TrunkSolver_Parameters"].get("Static_modifications_position_output_column_name") # Column name of the output where the  new fix modifications positions are annotated
-    Matchnumber_output_column_name = config["TrunkSolver_Parameters"].get("Matchnumber_output_column_name") # Column name of the output where the  number of possible options is annotated
-    Possible_option_output_column_name = config["TrunkSolver_Parameters"].get("Possible_option_output_column_name") # Column name of the output where all possible options are annotated
     output_file_suffix = config["TrunkSolver_Parameters"].get("output_file_suffix") # Chosen suffix for output file 
 
 
@@ -643,7 +626,7 @@ def main(file,file1,infile1, infilefasta):
     
     # Output columns are overwritten
     try: 
-        df.drop([TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_ppm_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name,Possible_option_output_column_name], axis=1)
+        df.drop([TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_ppm_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name], axis=1)
     except:
         pass
     
@@ -657,7 +640,6 @@ def main(file,file1,infile1, infilefasta):
     df[New_Theo_mh_output_column_name]=np.nan
     df[New_Deltamass_output_column_name]=np.nan  
     df[Static_modifications_position_output_column_name]=""
-    df[Matchnumber_output_column_name]=""
     df[Truncation_output_column_name]=""
 
     
@@ -665,7 +647,7 @@ def main(file,file1,infile1, infilefasta):
     logging.info("Processing input file")
     
     
-    df = df.apply(lambda y: applyTSSolver(y,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh_column_name,Delta_MH_cal_column_name,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh_column_name,x,TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,Matchnumber_output_column_name,Possible_option_output_column_name,fix_mod_column_name,TrunkCleanPeptide_output_column_name,Missing_cleavages_output_column_name,Truncation_output_column_name), axis = 1)
+    df = df.apply(lambda y: applyTSSolver(y,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh_column_name,Delta_MH_cal_column_name,Error,dic_aa,dic_CombList,dic_mod,NT_label,selectedaa,decnum,Mproton,Hydrogen,O2,Theo_mh_column_name,x,TrunkSequence_output_column_name,TrunkDM_output_column_name,TrunkLabel_output_column_name,TrunkLabel_ppm_output_column_name,New_Theo_mh_output_column_name,New_Deltamass_output_column_name,Static_modifications_position_output_column_name,fix_mod_column_name,TrunkCleanPeptide_output_column_name,Missing_cleavages_output_column_name,Truncation_output_column_name), axis = 1)
        
     # write outputfile
     logging.info("Writing output file")
