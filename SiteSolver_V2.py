@@ -46,7 +46,7 @@ def breakUp1(string,DM):
     """
     start = string.find("[")
     end = string.find("]")
-    massMod = float(DM)
+    massMod = round(float(DM),6)
     DM=float(string[(start)+1: (end)])
     secondHalf = string[end+1:]
 
