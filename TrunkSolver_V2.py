@@ -505,17 +505,15 @@ def applyTSSolver(row,MasterProtein_column_name,dic_fasta,Seq_column_name,Exp_mh
         else: 
             final_TrunkCleanPeptide_output_column_name = final_TrunkSequence[:final_TrunkSequence.find("[")]+final_TrunkSequence[final_TrunkSequence.find("]")+1:]
 
+
     number = final_TrunkCleanPeptide_output_column_name.count("K") + final_TrunkCleanPeptide_output_column_name.count("R")
 
     if final_TrunkCleanPeptide_output_column_name[-1]=="K" or final_TrunkCleanPeptide_output_column_name[-1]=="R": 
-        number = number-1
-    if final_TrunkCleanPeptide_output_column_name.find("KP")!=-1: 
-       number =number-1
-    if final_TrunkCleanPeptide_output_column_name.find("RP")!=-1: 
-        number =number-1    
+        number = number-1 
+    number = number- final_TrunkCleanPeptide_output_column_name.count("KP")-final_TrunkCleanPeptide_output_column_name.count("RP")
     if number <0 : 
         number = 0 
-    missingcleavage = number   
+    missingcleavage = number  
     if final_mods_position == " " or final_mods_position == "" :
         final_mods_position = row[fix_mod_column_name]
     if final_TrunkLabel.find("Trunc")!=-1:
