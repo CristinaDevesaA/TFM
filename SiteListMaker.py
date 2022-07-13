@@ -222,9 +222,9 @@ def main(file,infile1):
 
     df_final_corr_reindex,df_final_reindex,df_final_corr_p0_trans_reindex=tablesMaker(dic_SL,dic_NM,x)
     logging.info("Writting output file")
-    df_final_reindex.to_csv(Frequency_Table+".txt", index=False, sep='\t', encoding='utf-8')
-    df_final_corr_reindex.to_csv(Clean_Frequency_Table+".txt", index=False, sep='\t', encoding='utf-8')
-    df_final_corr_p0_trans_reindex.to_csv(Clean_P0_Frequency_Table+".txt", index=False, sep='\t', encoding='utf-8')
+    df_final_reindex.to_csv(infile1[:-4]+"_"+Frequency_Table+".txt", index=False, sep='\t', encoding='utf-8')
+    df_final_corr_reindex.to_csv(infile1[:-4]+"_"+Clean_Frequency_Table+".txt", index=False, sep='\t', encoding='utf-8')
+    df_final_corr_p0_trans_reindex.to_csv(infile1[:-4]+"_"+Clean_P0_Frequency_Table+".txt", index=False, sep='\t', encoding='utf-8')
     logging.info("end of the script")
 
 
