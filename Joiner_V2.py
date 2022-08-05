@@ -77,6 +77,8 @@ def main(solverconfig,infile):
     
     Output_colum_name = config["Joiner_Parameters"].get("Output_column_name")
     Output_file_suffix = config["Joiner_Parameters"].get("Output_file_suffix")
+    group_column_name  = config["Joiner_Parameters"].get("group_column_name")
+    Non_modified_name  = config["Joiner_Parameters"].get("Non_modified_name")
     decnum =  config["Joiner_Parameters"].get("decnum") # Number of decimales set by the user that will appear in the TrunkSequence column
     decnum = "."+str(decnum)+"f"
     
@@ -114,6 +116,8 @@ def main(solverconfig,infile):
                     item2=int(row[item])
                 except: 
                     item2=row[item]
+                if row[group_column_name]==Non_modified_name: 
+                    item2 = ""
             if item in dic.keys():
                 if row[item]==" ": 
                     item2 = row[dic[item]]
