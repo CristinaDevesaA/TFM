@@ -241,7 +241,7 @@ if __name__ == '__main__':
     defaultconfig = os.path.join(os.path.dirname(__file__), "config/Solver.ini")
     parser.add_argument('-i', '--infile', required=True, help='Path to input file')
     parser.add_argument('-c', '--config', default=defaultconfig, help='Path to custom configuration file')
-    parser.add_argument('-a', '--apexfile', default=defaultconfig, help='Path toapex file')    
+    parser.add_argument('-a', '--apexfile', default=defaultconfig, help='Path to apex file')    
     
     # These will overwrite the config if specified
     parser.add_argument('-r', '--relativeerror', help='Maximum allowable relative error (ppm)')
